@@ -8,12 +8,18 @@ local repairActivate = {
             "^%d+$",
             "^%d+$",
             "^%d+$"
+        },
+        {
+            "^%d+$"
         }
     },
     {
         "Kernel/data/keys/self/public",
         "Kernel/data/keys/self/private",
         "Kernel/data/keys/self/resetTime"
+    },
+    {
+        "Kernel/data/keys/serverPublicKey"
     },
     repair = {
         function()
@@ -32,11 +38,21 @@ local repairActivate = {
             local resetFile = fs.open("Kernel/data/keys/self/resetTime", "w")
             resetFile.write(getServerTickTime())
             fs.close(resetFile)
+        end,
+        function()
+            term.setBackgroundColor(16)
+            term.clear()
+            term.setCursorPos(1, 1)
+            local newKey = io.read()
+            
+            local serverFile = fs.open("Kernel/data/keys/serverPublicKey", "w")
+            serverFile.write(newKey)
+            fs.close(serverFile)
         end
     }
 }
 
-os.loadAPI("Kernel/data/keys/serverPublicKey")
+--os.loadAPI("Kernel/data/keys/serverPublicKey")
 
 os.loadAPI("Kernel/data/keys/self/public")
 os.loadAPI("Kernel/data/keys/self/private")
