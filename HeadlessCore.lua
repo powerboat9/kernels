@@ -58,7 +58,9 @@ os.loadAPI("Kernel/data/keys/self/public")
 os.loadAPI("Kernel/data/keys/self/private")
 os.loadAPI("Kernel/data/keys/self/resetTime")
 
-function encryptDecrypt(
+function encryptDecrypt(msg, key)
+    local nTotient = key
+    
 
 local rednetReplys = {
     --[[{
