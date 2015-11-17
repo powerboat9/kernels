@@ -58,6 +58,8 @@ os.loadAPI("Kernel/data/keys/self/public")
 os.loadAPI("Kernel/data/keys/self/private")
 os.loadAPI("Kernel/data/keys/self/resetTime")
 
+function encryptDecrypt(
+
 local rednetReplys = {
     --[[{
         number channelFrom: Channel to listen on.
