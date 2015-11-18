@@ -1,5 +1,5 @@
 function getServerTickTime()
-    print("Um... finish this \"getServerTickTime()\"")
+    return (os.day() * 24000) + ((os.time * 1000 + 18000)%24000)
 end
 
 local repairActivate = {
@@ -43,7 +43,12 @@ local repairActivate = {
             term.setBackgroundColor(16)
             term.clear()
             term.setCursorPos(1, 1)
+            print("Enter Server Public Key:")
             local newKey = io.read()
+            
+            term.setBackgroundColor(16)
+            term.clear()
+            term.setCursorPos(1, 1)
             
             local serverFile = fs.open("Kernel/data/keys/serverPublicKey", "w")
             serverFile.write(newKey)
@@ -52,15 +57,30 @@ local repairActivate = {
     }
 }
 
---os.loadAPI("Kernel/data/keys/serverPublicKey")
+function repairAll(t)
+    local repairCount = 0
+    for section, sectionTable in ipairs(t) do
+        for checkPathKey, checkPath in ipairs(sectionTable) do
+            if not fs.exists(checkPath) then
+                t.repair[section]()
+                break
+            else
+                local fileCheck = fs.open(checkPath)
+                if not string.find(fileCheck.readAll(), patterns[section][checkPathKey]) then
+                    t.repair[section]()
+                    break
+                end
+            end
+        end
+    end
+    return repairCount
+end
+
+os.loadAPI("Kernel/data/keys/serverPublicKey")
 
 os.loadAPI("Kernel/data/keys/self/public")
 os.loadAPI("Kernel/data/keys/self/private")
 os.loadAPI("Kernel/data/keys/self/resetTime")
-
-function encryptDecrypt(msg, key)
-    local nTotient = key
-    
 
 local rednetReplys = {
     --[[{
@@ -75,7 +95,7 @@ function processRednet(msg, id, protocol)
     if string.sub(msg, 1, 18) == "POWERCORE HEADER:\n" then
         local endHeader = string.find(msg, "\n \n")
         local processing = string.sub(msg, 19, endHeader - 1)
-        for line in string.gmatch(processing, ".-\n") do
+        for line in string.gmatch(processing, "[^%) do
             local separatorStart, separatorEnd = string.find(line, "%s?:%s?")
             local key = string.sub(line, 1, separatorStart - 1)
             local value = string.sub(line, separatorEnd + 1)
