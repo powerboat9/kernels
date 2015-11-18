@@ -95,7 +95,7 @@ function processRednet(msg, id, protocol)
     if string.sub(msg, 1, 18) == "POWERCORE HEADER:\n" then
         local endHeader = string.find(msg, "\n \n")
         local processing = string.sub(msg, 19, endHeader - 1)
-        for line in string.gmatch(processing, "[^%) do
+        for line in string.gmatch(processing, "([^%s\n]*)\n) do
             local separatorStart, separatorEnd = string.find(line, "%s?:%s?")
             local key = string.sub(line, 1, separatorStart - 1)
             local value = string.sub(line, separatorEnd + 1)
