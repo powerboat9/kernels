@@ -57,7 +57,14 @@ function isPrime(n, exact)
             return false
         end
         local c = 
-        elseif not (n == 2 or n == 3 or () or ())
+        elseif not (n == 2 or n == 3 or isWhole((n - 1) / 6) or isWhole((n + 1) / 6))
+            return false
+        else
+            --Finish Later
+        end
+    end
+    return true
+end
 
 function getPrime(exact)
     local prime = nil
